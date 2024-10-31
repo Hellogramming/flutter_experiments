@@ -8,11 +8,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 /// A random number generator used to generate random colors.
-final Random _random = Random();
+final Random _random = Random.secure();
 
 /// Generates a random color.
 Color getRandomColor() {
-  return Color.fromRGBO(_random.nextInt(256), _random.nextInt(256), _random.nextInt(256), 1.0);
+  return Color(0xFF000000 + _random.nextInt(0x1000000));
 }
 
 /// Returns an appropriate contast color for the given color (black or white).

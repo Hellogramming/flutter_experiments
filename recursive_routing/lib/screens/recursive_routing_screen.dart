@@ -47,13 +47,18 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
   }
 
   /// Navigates to a deeper recursive routing screen.
-  void _goDeep() {
+  void _goDown() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => RecursiveRoutingScreen(widget.level + 1),
       ),
     );
+  }
+
+  /// Navigates to a shallower recursive routing screen.
+  void _goUp() {
+    if (widget.level > 1) Navigator.pop(context);
   }
 
   /// Performs the tasks of the app bar actions.
@@ -92,13 +97,32 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
         ),
       ),
 
-      // The floating action button that navigates to a deeper recursive routing screen
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: _accentColor,
-        foregroundColor: contrastColor,
-        onPressed: _goDeep,
-        icon: const Icon(Icons.arrow_drop_down_circle),
-        label: const Text(strings.goDeeperTitle),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          // The floating action button that navigates to a shallower recursive routing screen
+          if (widget.level > 1) ...[
+            FloatingActionButton.large(
+              heroTag: 'goUp',
+              backgroundColor: _accentColor,
+              foregroundColor: contrastColor,
+              tooltip: strings.goUpTooltip,
+              onPressed: _goUp,
+              child: const Icon(Icons.arrow_back),
+            ),
+            const SizedBox(width: 16.0),
+          ],
+
+          // The floating action button that navigates to a deeper recursive routing screen
+          FloatingActionButton.large(
+            heroTag: 'goDown',
+            backgroundColor: _accentColor,
+            foregroundColor: contrastColor,
+            tooltip: strings.goDownTooltip,
+            onPressed: _goDown,
+            child: const Icon(Icons.arrow_forward),
+          ),
+        ],
       ),
     );
   }
