@@ -7,7 +7,8 @@
 library;
 
 const String appName = 'Flutter Recursive Routing';
-String recursiveRoutingScreenTitle(int depth) => 'Recursive Routing $depth';
+const String recursiveRoutingScreenTitle = 'Recursive Routing';
+String recursiveLevel(int level) => 'Level $level';
 const String goHomeTitle = 'Go home';
 const String goDeeperTitle = 'Go deeper';
 const String addTooltip = 'Increment counter to check state keeping';

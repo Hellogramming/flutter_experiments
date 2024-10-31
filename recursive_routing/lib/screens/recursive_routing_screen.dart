@@ -17,12 +17,12 @@ List<Color> _accentColors = <Color>[];
 /// A screen that demonstrates recursive routing and state keeping with a counter.
 class RecursiveRoutingScreen extends StatefulWidget {
   const RecursiveRoutingScreen(
-    this.depth, {
+    this.level, {
     super.key,
   });
 
-  /// The depth of the recursive routing screen.
-  final int depth;
+  /// The level of the recursive routing screen.
+  final int level;
 
   @override
   State<RecursiveRoutingScreen> createState() => _RecursiveRoutingScreenState();
@@ -39,11 +39,11 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
   void initState() {
     super.initState();
 
-    // Get the accent color for the current depth, and add more colors if necessary
-    if (widget.depth >= _accentColors.length) {
+    // Get the accent color for the current level, and add more colors if necessary
+    if (widget.level >= _accentColors.length) {
       _accentColors.add(color_utils.getRandomColor());
     }
-    _accentColor = _accentColors[widget.depth - 1];
+    _accentColor = _accentColors[widget.level - 1];
   }
 
   /// Navigates to a deeper recursive routing screen.
@@ -51,7 +51,7 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecursiveRoutingScreen(widget.depth + 1),
+        builder: (context) => RecursiveRoutingScreen(widget.level + 1),
       ),
     );
   }
@@ -78,7 +78,7 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
     return Scaffold(
       // The app bar with the title and actions, filled with the accent color of the current screen
       appBar: _AppBar(
-        depth: widget.depth,
+        level: widget.level,
         backgroundColor: _accentColor,
         foregroundColor: contrastColor,
         onAction: _onAppBarAction,
@@ -88,7 +88,7 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
       body: Center(
         child: Text(
           '$_counter',
-          style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: counterColor),
+          style: Theme.of(context).textTheme.displayLarge!.copyWith(color: counterColor),
         ),
       ),
 
@@ -114,14 +114,14 @@ enum _AppBarActions {
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   const _AppBar({
     super.key, // ignore: unused_element
-    required this.depth,
+    required this.level,
     this.backgroundColor,
     this.foregroundColor,
     this.onAction,
   });
 
-  /// The depth of the recursive routing to display in the app bar title.
-  final int depth;
+  /// The level of the recursive routing to display in the app bar title.
+  final int level;
 
   /// The background color of the app bar.
   final Color? backgroundColor;
@@ -137,7 +137,12 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
-      title: Text(strings.recursiveRoutingScreenTitle(depth)),
+      title: ListTile(
+        title: Text(strings.recursiveLevel(level)),
+        subtitle: const Text(strings.recursiveRoutingScreenTitle),
+        textColor: foregroundColor,
+        contentPadding: EdgeInsets.zero,
+      ),
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.add_circle),
