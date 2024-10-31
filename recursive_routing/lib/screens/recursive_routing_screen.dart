@@ -5,7 +5,10 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 import '../common/strings.dart' as strings;
+import '../common/urls.dart' as urls;
 import '../utils/color_utils.dart' as color_utils;
 
 /// The list of accent colors for the recursive routing screens.
@@ -64,13 +67,21 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
   /// Performs the tasks of the app bar actions.
   void _onAppBarAction(_AppBarActions action) {
     switch (action) {
+      // Increment the counter
       case _AppBarActions.incrementCounter:
-        // Increment the counter
         setState(() => _counter++);
         break;
+      // Go back to the first level of the recursive routing
       case _AppBarActions.goHome:
-        // Go back to the first level of the recursive routing
         Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+      // Open the source code of the experiments in the browser
+      case _AppBarActions.viewSource:
+        launchUrl(Uri.parse(urls.viewSourceUrl));
+        break;
+      // Open the about page of the experiments in the browser
+      case _AppBarActions.about:
+        launchUrl(Uri.parse(urls.aboutUrl));
         break;
     }
   }
@@ -132,6 +143,8 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
 enum _AppBarActions {
   incrementCounter,
   goHome,
+  viewSource,
+  about,
 }
 
 /// The app bar of the recursive routing screen.
@@ -178,7 +191,20 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
           itemBuilder: (_) => [
             const PopupMenuItem(
               value: _AppBarActions.goHome,
-              child: Text(strings.goHomeTitle),
+              child: Text(strings.goHomeMenuItem),
+            ),
+
+            // Add a divider between the menu items
+            const PopupMenuDivider(),
+
+            const PopupMenuItem(
+              value: _AppBarActions.viewSource,
+              child: Text(strings.viewSourceMenuItem),
+            ),
+
+            const PopupMenuItem(
+              value: _AppBarActions.about,
+              child: Text(strings.aboutMenuItem),
             ),
           ],
         ),
