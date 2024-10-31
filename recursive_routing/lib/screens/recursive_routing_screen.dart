@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 import '../common/strings.dart' as strings;
 import '../utils/color_utils.dart' as color_utils;
 
+/// The list of accent colors for the recursive routing screens.
+///
+/// The colors are used to visually distinguish the recursive routing screens when they are
+/// navigated. The colors are generated randomly as the screens are navigated deeper.
+List<Color> _accentColors = <Color>[];
+
 /// A screen that demonstrates recursive routing and state keeping with a counter.
 class RecursiveRoutingScreen extends StatefulWidget {
   const RecursiveRoutingScreen(
@@ -27,19 +33,17 @@ class _RecursiveRoutingScreenState extends State<RecursiveRoutingScreen> {
   int _counter = 0;
 
   /// The accent color of the current recursive routing screen.
-  ///
-  /// Used for the app bar background color and the floating action button color, in order to
-  /// visually distinguish the recursive routing screens when they are navigated.
   late final Color _accentColor;
 
   @override
   void initState() {
     super.initState();
 
-    // Generate a random color for the accent color of the current screen
-    // Uses the depth as the seed to generate a different color for each screen but the same color
-    // for the same screen when it is navigated back to
-    _accentColor = color_utils.getRandomColorWithSeed(widget.depth);
+    // Get the accent color for the current depth, and add more colors if necessary
+    if (widget.depth >= _accentColors.length) {
+      _accentColors.add(color_utils.getRandomColor());
+    }
+    _accentColor = _accentColors[widget.depth - 1];
   }
 
   /// Navigates to a deeper recursive routing screen.

@@ -7,12 +7,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Generates a random color with the given seed.
-///
-/// This ensures that the same seed generates the same color.
-Color getRandomColorWithSeed(int seed) {
-  final Random random = Random(seed);
-  return Color(0xFF000000 + random.nextInt(0x1000000));
+/// A random number generator used to generate random colors.
+final Random _random = Random();
+
+/// Generates a random color.
+Color getRandomColor() {
+  return Color.fromRGBO(_random.nextInt(256), _random.nextInt(256), _random.nextInt(256), 1.0);
 }
 
 /// Returns an appropriate contast color for the given color (black or white).
